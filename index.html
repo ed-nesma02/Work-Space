@@ -5,13 +5,16 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>WorkSpace</title>
   <link rel="stylesheet" href="css/normalize.css">
+  <link rel="stylesheet" href="css/choices.min.css">
   <link rel="stylesheet" href="css/style.css">
+  <script src="js/choices.min.js" defer></script>
+  <script src="js/scripts.js" defer></script>
 </head>
 <body>
   <header class="header">
     <div class="container header__container">
       <img src="img/logo.svg" alt="Логотип WorkSpace" class="header__logo">
-      <a href="#vacancies" class="header__link">Посмотреть вакансии</a>
+      <a href="#vacancies" class="header__link btn-hover">Посмотреть вакансии</a>
     </div>
   </header>
   <main class="main">
@@ -24,6 +27,7 @@
     </section>
     <div class="vacancies" id="vacancies">
       <div class="container vacancies__container">
+        <button class="vacancies__filter-btn">Фильтр</button>
         <section class="vacancies__filter filter">
           <h2 class="filter__title">Фильтр</h2>
           <form class="filter__form">
@@ -35,39 +39,60 @@
                 <option>Санкт-Петербург</option>
                 <option>Новосибирск</option>
               </select>
-              <fieldset class="filter__fieldset">
+            </fieldset>
+            <fieldset class="filter__fieldset">
                 <legend class="filter__legend">Заработная плата</legend>
                 <div class="filter__range">
-                  <input type="number" class="filter__input" name="pay-from" placeholder="От">
-                  <input type="number" class="filter__input" name="pay-to" placeholder="До">
+                  <input type="number" class="filter__input" name="pay-from" placeholder="от">
+                  <input type="number" class="filter__input" name="pay-to" placeholder="до">
                 </div>
             </fieldset>
-            <div class="filter__chekboxes">
+            <div class="filter__checkboxes">
               <fieldset class="filter__fieldset">
                 <legend class="filter__legend">Формат</legend>
                 <label class="filter__label checkbox">
                   <input class="checkbox__input" type="checkbox" name="format" value="Офис">Офис
+                </label>
+                <label class="filter__label checkbox">
                   <input class="checkbox__input" type="checkbox" name="format" value="Удаленный">Удаленный
+                </label>
+                <label class="filter__label checkbox">
                   <input class="checkbox__input" type="checkbox" name="format" value="Гибкий">Гибкий
                 </label>
               </fieldset>
               <fieldset class="filter__fieldset">
                 <legend class="filter__legend">Опыт работы</legend>
-                <input class="checkbox__input" type="checkbox" name="format" value="Не важно">Не важно
-                <input class="checkbox__input" type="checkbox" name="format" value="Без опыта">Без опыта
-                <input class="checkbox__input" type="checkbox" name="format" value="От 1 года до 3-х лет">От 1 года до 3-х лет
-                <input class="checkbox__input" type="checkbox" name="format" value="От 3-х лет">От 3-х лет
+                <label class="filter__label checkbox">
+                  <input class="checkbox__input" type="checkbox" name="format" value="Не важно">Не важно
+                </label>
+                <label class="filter__label checkbox">
+                  <input class="checkbox__input" type="checkbox" name="format" value="Без опыта">Без опыта
+                </label>
+                <label class="filter__label checkbox">
+                  <input class="checkbox__input" type="checkbox" name="format" value="От 1 года до 3-х лет">От 1 года до 3-х лет
+                </label>
+                <label class="filter__label checkbox">
+                  <input class="checkbox__input" type="checkbox" name="format" value="От 3-х лет">От 3-х лет
+                </label>
               </fieldset>
               <fieldset class="filter__fieldset">
                 <legend class="filter__legend">Занятость</legend>
-                <input class="checkbox__input" type="checkbox" name="format" value="Полная">Полная
-                <input class="checkbox__input" type="checkbox" name="format" value="Частичная">Частичная
-                <input class="checkbox__input" type="checkbox" name="format" value="Стажировка">Стажировка
-                <input class="checkbox__input" type="checkbox" name="format" value="Проектная работа">Проектная работа
+                <label class="filter__label checkbox">
+                  <input class="checkbox__input" type="checkbox" name="format" value="Полная">Полная
+                </label>
+                <label class="filter__label checkbox">
+                  <input class="checkbox__input" type="checkbox" name="format" value="Частичная">Частичная
+                </label>
+                <label class="filter__label checkbox">
+                  <input class="checkbox__input" type="checkbox" name="format" value="Стажировка">Стажировка
+                </label>
+                <label class="filter__label checkbox">
+                  <input class="checkbox__input" type="checkbox" name="format" value="Проектная работа">Проектная работа
+                </label>
               </fieldset>
             </div>
             <div class="filter__buttons">
-              <button class="filter__button" type="submit">Применить</button>
+              <button class="filter__button btn-hover" type="submit">Применить</button>
               <button class="filter__reset" type="reset">Очистить</button>
             </div>
           </form>
@@ -172,5 +197,51 @@
       </ul>
     </div>
   </footer>
+
+  <div class="modal">
+    <div class="modal__body">
+      <article class="info">
+        <svg class="info__close" width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <g id="Property 1=hover" clip-path="url(#clip0_28_4089)">
+          <path id="Vector" d="M10.7833 10L15.3889 5.39444C15.4799 5.28816 15.5275 5.15145 15.5221 5.01163C15.5167 4.87181 15.4587 4.73918 15.3598 4.64024C15.2608 4.5413 15.1282 4.48334 14.9884 4.47794C14.8486 4.47254 14.7118 4.52009 14.6056 4.61111L10 9.21666L5.39446 4.60555C5.28984 4.50094 5.14796 4.44217 5.00001 4.44217C4.85207 4.44217 4.71018 4.50094 4.60557 4.60555C4.50095 4.71017 4.44218 4.85205 4.44218 5C4.44218 5.14794 4.50095 5.28983 4.60557 5.39444L9.21668 10L4.60557 14.6056C4.54741 14.6554 4.50018 14.7166 4.46683 14.7856C4.43349 14.8545 4.41475 14.9296 4.41179 15.0061C4.40884 15.0826 4.42173 15.1589 4.44966 15.2302C4.47759 15.3015 4.51995 15.3662 4.5741 15.4204C4.62824 15.4745 4.69299 15.5169 4.76428 15.5448C4.83557 15.5727 4.91186 15.5856 4.98838 15.5827C5.06489 15.5797 5.13996 15.561 5.20888 15.5276C5.27781 15.4943 5.3391 15.447 5.3889 15.3889L10 10.7833L14.6056 15.3889C14.7118 15.4799 14.8486 15.5275 14.9884 15.5221C15.1282 15.5167 15.2608 15.4587 15.3598 15.3598C15.4587 15.2608 15.5167 15.1282 15.5221 14.9884C15.5275 14.8485 15.4799 14.7118 15.3889 14.6056L10.7833 10Z" fill="currentColor"/>
+          </g>
+          <defs>
+          <clipPath id="clip0_28_4089">
+          <rect width="20" height="20" fill="white"/>
+          </clipPath>
+          </defs>
+        </svg>          
+        <div class="info__top">
+          <img src="img/creative.svg" alt="Логотип компании Creative People" class="info__logo">
+          <div class="info__wrapper-top">
+            <p class="info__company">Creative People</p>
+            <h3 class="info__title">Графический дизайнер</h3>
+          </div>
+        </div>
+        <div class="info__main">
+          <div class="info__texts">
+            <p class="info__text">Привет. Мы в CreativePeople ищем middle графического дизайнера в свою дизайн команду. Удаленно, из любой точки нашей страны, где у вас будет хороший интернет. Опыт работы в разработке логотипов, фирменных стилей обязателен.
+            </p>
+            <p class="info__text">
+              У нас в портфолио много крупных российских компаний, с некоторыми мы работаем уже много лет и делаем самые разные проекты, от сайтов до мобильных приложений. 
+            </p>  
+          </div>
+          <ul class="info__conditions">
+            <li class="info__condition">от 110 000₽</li>
+            <li class="info__condition">проектная работа</li>
+            <li class="info__condition">удаленный</li>
+            <li class="info__condition">опыт от 1 года до 3-х лет</li>
+            <li class="info__condition">Москва</li>
+          </ul>
+        </div>
+        <div class="info__bottom">
+          <p class="info__contact">Отправляйте резюме на
+            <a href="mailto:CreativePeople@gmail.com" class="info__link blue-text">CreativePeople@gmail.com</a>
+          </p>
+        </div>
+        <img src="img/likemen.png" alt="Показывающий лайк" class="info__likemen">
+      </article>
+    </div>
+  </div>
 </body>
 </html>
