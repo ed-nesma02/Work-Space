@@ -1,8 +1,9 @@
 const API_URL = "https://workspace-methed.vercel.app/";
 const LOCATION_URL = "api/locations";
 const VACANCY_URL = "api/vacancy";
-
 const cardsList = document.querySelector(".cards__list");
+let lastUrl="";
+const pagination = {};
 
 const getData = async (url, cbSuccess, cbError) => {
   try {
@@ -32,18 +33,45 @@ const createCard = (vacancy) => `
   </article>
 `;
 
-const createCards = (data) =>
+const createCards = (data) =>(
   data.vacancies.map((vacancy) => {
     const li = document.createElement("li");
     li.classList.add("cards__item");
     li.insertAdjacentHTML("beforeend", createCard(vacancy));
     return li;
-  });
+  })
+)
 
-const rebederVacancy = (data, cardsList) => {
+const renderVacancies = (data) => {
   cardsList.textContent = "";
   const cards = createCards(data);
   cardsList.append(...cards);
+
+  if(data.pagination){
+    Object.assign(pagination, data.pagination)
+  }
+
+  observer.observe(cardsList.lastElementChild)
+};
+
+const renderMoreVacancies = (data) => {
+  const cards = createCards(data);
+  cardsList.append(...cards);
+
+  if(data.pagination){
+    Object.assign(pagination, data.pagination)
+  }
+};
+
+const loadMoreVacancies = () => {
+  if(pagination.totalPages > pagination.currentPage){
+    const urlWithParams = new URL(lastUrl)
+    urlWithParams.searchParams.set('page', pagination.currentPage + 1)
+    urlWithParams.searchParams.set("limit", window.innerWidth < 768 ? 6 : 12)
+    getData(urlWithParams, renderMoreVacancies, renderError).then(()=>{
+      lastUrl = urlWithParams;
+    })
+  }
 };
 
 const renderError = (err) => {
@@ -61,7 +89,8 @@ const createDetailVacancy = ({
   logo,
   salary,
   title,
-  type,}) => `
+  type,
+}) => `
   <article class="info">          
     <div class="info__top">
       <img src="${API_URL}${logo}" alt="Логотип компании ${company}" class="info__logo">
@@ -71,11 +100,11 @@ const createDetailVacancy = ({
       </div>
     </div>
     <div class="info__main">
-      <div class="info__texts">
-        <p class="info__text">${description.replaceAll("\n", "<br>")}</p>  
-      </div>
+      <p class="info__text">${description.replaceAll("\n", "<br>")}</p>  
       <ul class="info__conditions">
-        <li class="info__condition">от ${parseInt(salary).toLocaleString()}₽</li>
+        <li class="info__condition">от ${parseInt(
+          salary
+        ).toLocaleString()}₽</li>
         <li class="info__condition">${type}</li>
         <li class="info__condition">${format}</li>
         <li class="info__condition">${experience}</li>
@@ -97,7 +126,7 @@ const renderModal = (data) => {
   const modalMain = document.createElement("div");
   modalMain.classList.add("modal__body");
   const modalClose = document.createElement("button");
-  modalClose.classList.add("modal__close")
+  modalClose.classList.add("modal__close");
   modalClose.innerHTML = `
   <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
     <g id="Property 1=hover" clip-path="url(#clip0_28_4089)">
@@ -114,9 +143,9 @@ const renderModal = (data) => {
   modalMain.append(modalClose);
   modal.append(modalMain);
   document.body.append(modal);
-  modal.addEventListener("click", ({target})=>{
-    if( target == modal || target.closest("button") == modalClose){
-      document.body.removeChild(modal);
+  modal.addEventListener("click", ({ target }) => {
+    if (target == modal || target.closest(".modal__close")) {
+      modal.remove();
     }
   });
 };
@@ -125,13 +154,30 @@ const openModal = (id) => {
   getData(`${API_URL}${VACANCY_URL}/${id}`, renderModal, renderError);
 };
 
+const observer = new IntersectionObserver(
+  (entries) => {
+    entries.forEach(entry =>{
+      if(entry.isIntersecting){
+        loadMoreVacancies();
+      }
+    })
+  },
+  {
+    rootMargin: "100px",
+  }
+)
+
 const init = () => {
+  const filterForm = document.querySelector(".filter__form");
+  const filterBtn = document.querySelector(".vacancies__filter-btn")
+  const filter = document.querySelector(".vacancies__filter")
   //select city
   const citySelect = document.querySelector("#city");
   const cityChoices = new Choices(citySelect, {
     itemSelectText: "",
     allowHTML: "true",
   });
+
   getData(
     `${API_URL}${LOCATION_URL}`,
     (locationData) => {
@@ -144,15 +190,17 @@ const init = () => {
   );
 
   //cards
-  const url = new URL(`${API_URL}${VACANCY_URL}`);
+  const urlWithParams = new URL(`${API_URL}${VACANCY_URL}`);
+  urlWithParams.searchParams.set("limit", window.innerWidth < 768 ? 6 : 12)
+  urlWithParams.searchParams.set("page", 1)
   getData(
-    url,
-    (data) => {
-      rebederVacancy(data, cardsList);
-    },
+    urlWithParams,
+    renderVacancies,
     renderError
-  );
-
+  ).then(()=>{
+    lastUrl = urlWithParams;
+  });
+  //Modal
   cardsList.addEventListener("click", ({ target }) => {
     const vacancyCard = target.closest(".vacancy");
     if (vacancyCard) {
@@ -160,6 +208,30 @@ const init = () => {
       openModal(vacancyId);
     }
   });
+
+  //Filter
+  filterForm.addEventListener("submit", (event) => {
+    event.preventDefault();
+    const formData = new FormData(filterForm);
+    const urlWithParam = new URL(`${API_URL}${VACANCY_URL}`);
+    formData.forEach((value, key) => {
+      urlWithParam.searchParams.append(key, value);
+    });
+    getData(
+      urlWithParam,
+      renderVacancies,
+      renderError
+    ).then(()=>{
+      lastUrl = urlWithParam;
+    });
+  });
+
+  //Filter open
+  filterBtn.addEventListener("click",()=>{
+    filterBtn.classList.toggle("vacancies__filter-btn_active");
+    filter.classList.toggle("vacancies__filter_active")
+  })
+
 };
 
 init();

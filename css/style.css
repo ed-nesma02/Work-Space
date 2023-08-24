@@ -120,7 +120,8 @@ fieldset {
 
 .hero__container{
   position: relative;
-  padding: 57px 0;
+  padding-top: 57px;
+  padding-bottom: 57px;
 }
 
 .hero__container::after{
@@ -133,6 +134,8 @@ fieldset {
   background: url("../img/laptop.png") no-repeat center/contain;
 }
 .hero__title{
+  position: relative;
+  z-index: 2;
   font-size: 90px;
   letter-spacing: 1.8px;
   text-transform: uppercase;
@@ -206,7 +209,6 @@ fieldset {
 .filter__range {
   display: flex;
   align-items: center;
-  justify-content: space-between;
   gap: 10px;
 }
 
@@ -301,10 +303,8 @@ fieldset {
 /** ------------------------------Vacancy---------------------------- */
 
 .vacancy{
+  height: 100%;
   padding: 16px;
-  display: flex;
-  flex-direction: column;
-  align-items: start;
   border-radius: 16px;
   background: #FFF;
   transition: box-shadow .2s ease-in-out;
@@ -325,8 +325,10 @@ fieldset {
   margin-bottom: 8px;
 }
 .vacancy__title {
+  display: inline-block;
   margin-bottom: 8px;
   padding: 3px 5px;
+  font-weight: 400;
   font-size: 14px;
   border-radius: 4px;
   background: #EAECFF;
@@ -421,6 +423,8 @@ fieldset {
 /** ------------------------------Modal---------------------------- */
 .modal {
   position: fixed;
+  z-index: 5;
+  padding: 30px;
   display: flex;
   inset: 0;
   background-color: rgba(0, 0, 0, 0.5);
@@ -464,11 +468,13 @@ fieldset {
   gap: 20px;
 }
 .info__logo {
+  max-width: 101px;
   max-height: 101px;
 }
 .info__wrapper-top {
   display: flex;
   flex-direction: column;
+  align-items: start;
   gap: 12px;
 }
 .info__company {
